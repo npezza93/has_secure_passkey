@@ -399,5 +399,5 @@ class WebAuthn extends HTMLElement {
   }
 }
 
-// app/assets/javascripts/components/index.js
+// app/assets/javascripts/components/has_secure_passkey.js
 customElements.define("web-authn", WebAuthn);
