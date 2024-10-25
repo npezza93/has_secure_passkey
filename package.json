@@ -1,0 +1,8 @@
+{
+  "name": "has_secure_passkey",
+  "module": "app/assets/javascripts/components/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "bun run bun.config.js"
+  }
+}
