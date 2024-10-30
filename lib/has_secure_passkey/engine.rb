@@ -31,5 +31,11 @@ module HasSecurePasskey
         helper HasSecurePasskey::Engine.helpers
       end
     end
+
+    initializer "has_secure_passkey.active_record_helpers" do
+      ActiveSupport.on_load(:active_record) do
+        extend HasSecurePasskey::ActiveRecordHelpers
+      end
+    end
   end
 end
