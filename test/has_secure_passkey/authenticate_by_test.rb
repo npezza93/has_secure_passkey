@@ -1,5 +1,4 @@
 require "test_helper"
-require "webauthn/fake_client"
 
 class HasSecurePasskey::AuthenticateByTest < ActiveSupport::TestCase
   test "#authenticated" do

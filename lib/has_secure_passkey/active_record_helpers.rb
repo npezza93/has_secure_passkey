@@ -17,5 +17,11 @@ module HasSecurePasskey::ActiveRecordHelpers
         new(model: self, challenge:, params:).
         authenticated
     end
+
+    define_method :add_passkey do |challenge:, params:|
+      HasSecurePasskey::AddPasskey.
+        new(authenticatable: self, challenge:, params:).
+        save
+    end
   end
 end
