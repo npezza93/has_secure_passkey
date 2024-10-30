@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  email: 1@example.com
+  webauthn_id: <%= User.webauthn_id %>
+
+two:
+  email: 2@example.com
+  webauthn_id: <%= User.webauthn_id %>
