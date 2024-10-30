@@ -6,6 +6,14 @@ module HasSecurePasskey
       #{root}/app/helpers
     )
 
+    initializer "has_secure_passkey.webauthn" do |app|
+      WebAuthn.configure do |config|
+        config.origin = ENV.fetch("APP_URL", app.config.x.url)
+        config.rp_name = app.name
+        config.credential_options_timeout = 120_000
+      end
+    end
+
     initializer "has_secure_passkey.assets" do
       if Rails.application.config.respond_to?(:assets)
         Rails.application.config.assets.precompile += %w( has_secure_passkey.js )
