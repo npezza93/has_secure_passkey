@@ -1,0 +1,20 @@
+class RegistrationsController < ApplicationController
+  prevent_authenticated_access only: %i(new create)
+  allow_unauthenticated_access only: %i(new create)
+
+  def new
+    @person = Person.new
+  end
+
+  def create
+    @person = Person.new(email: params[:person][:email]))
+
+    if @person.valid?
+      EmailVerificationMailer.verify(person).deliver_later
+
+      render :create
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+end

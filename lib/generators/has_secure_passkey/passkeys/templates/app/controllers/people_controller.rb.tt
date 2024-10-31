@@ -1,0 +1,11 @@
+class PeopleController < ApplicationController
+  allow_unauthenticated_access
+  prevent_authenticated_access
+
+  def create
+    @person = Person.create_by_webauthn(params:)
+    start_new_session_for(@person)
+
+    redirect_to after_authentication_url
+  end
+end

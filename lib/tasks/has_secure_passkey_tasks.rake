@@ -1,4 +1,4 @@
-# desc "Explaining what the task does"
-# task :has_secure_passkey do
-#   # Task goes here
-# end
+desc "Install passkeys"
+task :passkeys do
+  Rails::Command.invoke :generate, [ "has_secure_passkey:passkeys" ]
+end

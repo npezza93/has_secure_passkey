@@ -1,0 +1,30 @@
+class Passkey < ApplicationRecord
+  include ActionView::Helpers::DateHelper
+
+  belongs_to :authenticatable, polymorphic: true
+
+  validates :external_id, presence: true, uniqueness: true
+  validates :public_key,  presence: true
+  validates :sign_count,  presence: true, numericality: {
+    only_integer: true, greater_than_or_equal_to: 0
+  }
+
+  before_destroy do
+    if authenticatable.passkeys.excluding(self).blank?
+      errors.add(:base, "Can't remove your only passkey")
+      throw :abort
+    end
+  end
+
+  def name_or_default
+    name.presence || "security key"
+  end
+
+  def last_used
+    if last_used_at.present?
+      "Last used #{time_ago_in_words last_used_at} ago"
+    else
+      "Never used"
+    end
+  end
+end

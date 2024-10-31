@@ -1,0 +1,7 @@
+class Session < ApplicationRecord
+  belongs_to :person
+
+  def self.from_cookie(cookie_jar)
+    find_by(id: cookie_jar.signed[:session_id])
+  end
+end

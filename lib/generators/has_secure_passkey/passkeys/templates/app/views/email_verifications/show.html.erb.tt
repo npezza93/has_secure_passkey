@@ -1,0 +1,11 @@
+<%% if (prompt = prompt_for_new_passkey(callback: people_path)) %>
+  <h2>Verified!</h2>
+  <p>Let's add your passkey.</p>
+
+  <%%= prompt %>
+<%% else %>
+  <h2>
+    Hmm, that link looks wrong.
+    <%%= link_to "Try again.", new_registration_path, class: "underline decoration-2" %>
+  </h2>
+<%% end %>

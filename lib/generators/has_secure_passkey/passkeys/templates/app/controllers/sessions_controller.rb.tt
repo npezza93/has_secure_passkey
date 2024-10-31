@@ -1,0 +1,20 @@
+class SessionsController < ApplicationController
+  allow_unauthenticated_access
+  prevent_authenticated_access except: :destroy
+
+  def create
+    if (person = Person.authenticate_by(params:)).present?
+      start_new_session_for(person)
+
+      redirect_to after_authentication_url
+    else
+      render turbo_stream: turbo_stream.prepend_all("body", "<p>Something went wrong. Try again</p>")
+    end
+  end
+
+  def destroy
+    terminate_session
+
+    redirect_to root_path
+  end
+end

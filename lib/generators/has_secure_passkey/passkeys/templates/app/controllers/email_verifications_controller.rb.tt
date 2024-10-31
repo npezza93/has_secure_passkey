@@ -1,0 +1,7 @@
+class EmailVerificationsController < ApplicationController
+  prevent_authenticated_access
+  allow_unauthenticated_access
+
+  def show
+  end
+end

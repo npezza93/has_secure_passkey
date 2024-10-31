@@ -40,5 +40,9 @@ module HasSecurePasskey::ActiveRecordHelpers
         new(authenticatable: self, params:).
         save
     end
+
+    define_method :encode_webauthn_message do
+      HasSecurePasskey::OptionsForCreate.new(authenticatable: self).message
+    end
   end
 end

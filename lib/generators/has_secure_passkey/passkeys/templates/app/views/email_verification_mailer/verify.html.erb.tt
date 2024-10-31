@@ -1,0 +1,1 @@
+<%%= link_to "Finish signing up", email_verification_url(@person.encode_webauthn_message) %>

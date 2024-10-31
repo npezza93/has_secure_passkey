@@ -1,0 +1,7 @@
+class EmailVerificationMailer < ApplicationMailer
+  def verify(person)
+    @person = person
+
+    mail to: person.email_address, subject: "Verify your email"
+  end
+end

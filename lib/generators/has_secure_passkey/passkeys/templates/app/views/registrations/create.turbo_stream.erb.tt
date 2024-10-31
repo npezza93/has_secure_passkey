@@ -1,0 +1,7 @@
+<%%= turbo_stream.update "new-registration" do %>
+  <div>
+    <h2>We've sent you an email!</h2>
+
+    <p>Click the link in the email to verify it's you.</p>
+  </div>
+<%% end %>

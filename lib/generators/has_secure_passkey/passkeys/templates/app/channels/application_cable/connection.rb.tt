@@ -1,0 +1,16 @@
+module ApplicationCable
+  class Connection < ActionCable::Connection::Base
+    identified_by :current_person
+
+    def connect
+      set_current_person || reject_unauthorized_connection
+    end
+
+    private
+      def set_current_person
+        if session = Session.from_cookie(cookies)
+          self.current_person = session.person
+        end
+      end
+  end
+end
