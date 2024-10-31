@@ -1,9 +1,9 @@
 module HasSecurePasskey
   module ApplicationHelper
-    def prompt_for_new_passkey(callback:, **options)
+    def prompt_for_new_passkey(callback:, current_authenticatable: nil **options)
       options_for_create =
-        if authenticated?
-          HasSecurePasskey::OptionsForCreate.new(person: Current.person)
+        if current_authenticatable.present?
+          HasSecurePasskey::OptionsForCreate.new(authenticatable: current_authenticatable)
         else
           HasSecurePasskey::OptionsForCreate.
             from_message(params[:web_authn_message])

@@ -6,13 +6,13 @@ class HasSecurePasskey::OptionsForCreate
 
     def from_message(message)
       new(**verifier.verify(message).symbolize_keys).tap do
-        it.person.symbolize_keys! if it.person.is_a?(Hash)
+        it.authenticatable.symbolize_keys! if it.authenticatable.is_a?(Hash)
       end
     end
   end
 
-  def initialize(person:, options: nil, challenge: nil)
-    @person = person
+  def initialize(authenticatable:, options: nil, challenge: nil)
+    @authenticatable = authenticatable
     @options = options
     @challenge = challenge
   end
@@ -20,7 +20,7 @@ class HasSecurePasskey::OptionsForCreate
   def message
     self.class.verifier.generate(
       { challenge:, options:,
-        person: person.as_json(only: %i(email webauthn_id)) }.as_json
+        authenticatable: authenticatable.as_json(only: %i(email webauthn_id)) }.as_json
     )
   end
 
@@ -36,14 +36,14 @@ class HasSecurePasskey::OptionsForCreate
     @challenge ||= credential.challenge
   end
 
-  attr_reader :person
+  attr_reader :authenticatable
 
   private
 
   def credential
     @credential ||= WebAuthn::Credential.options_for_create(
-      user: { name: person.email, id: person.webauthn_id },
-      exclude: person.passkeys.pluck(:external_id)
+      user: { name: authenticatable.email, id: authenticatable.webauthn_id },
+      exclude: authenticatable.passkeys.pluck(:external_id)
     )
   end
 end
