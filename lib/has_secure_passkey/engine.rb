@@ -16,7 +16,7 @@ module HasSecurePasskey
 
     initializer "has_secure_passkey.assets" do
       if Rails.application.config.respond_to?(:assets)
-        Rails.application.config.assets.precompile += %w( has_secure_passkey.js )
+        Rails.application.config.assets.precompile += %w(has_secure_passkey.js)
       end
     end
 

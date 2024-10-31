@@ -3,8 +3,8 @@ require_relative "lib/has_secure_passkey/version"
 Gem::Specification.new do |spec|
   spec.name        = "has_secure_passkey"
   spec.version     = HasSecurePasskey::VERSION
-  spec.authors     = ["Nick Pezza"]
-  spec.email       = ["pezza@hey.com"]
+  spec.authors     = [ "Nick Pezza" ]
+  spec.email       = [ "pezza@hey.com" ]
   spec.homepage    = "https://github.com/npezza93/has_secure_passkey"
   spec.summary     = "Add passkey support to Rails"
   spec.license     = "MIT"

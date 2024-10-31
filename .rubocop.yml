@@ -1,10 +1,37 @@
 # Omakase Ruby styling for Rails
 inherit_gem: { rubocop-rails-omakase: rubocop.yml }
 AllCops:
+  Exclude:
+    - test/dummy/db/schema.rb
   TargetRubyVersion: 3.4
 
-# Overwrite or add rules to create your own house style
-#
-# # Use `[a, [b, c]]` not `[ a, [ b, c ] ]`
-# Layout/SpaceInsideArrayLiteralBrackets:
-#   Enabled: false
+Layout/SpaceInsideArrayPercentLiteral:
+  Description: No unnecessary additional spaces between elements in %i/%w literals.
+  Enabled: true
+
+Layout/SpaceInsidePercentLiteralDelimiters:
+  Description: No unnecessary spaces inside delimiters of %i/%w/%x literals.
+  Enabled: true
+Lint/PercentStringArray:
+  Description: Checks for unwanted commas and quotes in %w/%W literals.
+  Enabled: true
+
+Lint/PercentSymbolArray:
+  Description: Checks for unwanted commas and colons in %i/%I literals.
+  Enabled: true
+
+Style/BarePercentLiterals:
+  Description: Checks if usage of %() or %Q() matches configuration.
+  StyleGuide: https://github.com/bbatsov/ruby-style-guide#percent-q-shorthand
+  Enabled: true
+Style/PercentLiteralDelimiters:
+  Description: Use `%`-literal delimiters consistently
+  StyleGuide: https://github.com/bbatsov/ruby-style-guide#percent-literal-braces
+  Enabled: true
+  PreferredDelimiters:
+    default: ()
+    '%i': '()'
+    '%I': '()'
+    '%r': '{}'
+    '%w': '()'
+    '%W': '()'
