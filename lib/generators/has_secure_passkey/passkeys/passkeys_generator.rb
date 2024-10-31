@@ -37,10 +37,12 @@ class HasSecurePasskey::PasskeysGenerator < Rails::Generators::Base
   end
 
   def configure_passkey_routes
-    route "mount HasSecurePasskey::Engine => \"/has_secure_passkey\""
-    route "resource :registration, only: %i(new create)"
-    route "resources :email_verifications, only: :show, param: :webauthn_message"
+    route "resource :sessions, only: :destroy"
+    route "resources :sessions, only: :create"
     route "resources :people, only: :create"
+    route "resources :email_verifications, only: :show, param: :webauthn_message"
+    route "resource :registration, only: %i(new create)"
+    route "mount HasSecurePasskey::Engine => \"/has_secure_passkey\""
   end
 
   def add_migrations

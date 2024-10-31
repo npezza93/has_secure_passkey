@@ -20,7 +20,7 @@ class HasSecurePasskey::OptionsForCreate
   def message
     self.class.verifier.generate(
       { challenge:, options:,
-        authenticatable: authenticatable.as_json(only: %i(email webauthn_id)) }.as_json
+        authenticatable: authenticatable.as_json(only: %i(email_address webauthn_id)) }.as_json
     )
   end
 
@@ -42,7 +42,7 @@ class HasSecurePasskey::OptionsForCreate
 
   def credential
     @credential ||= WebAuthn::Credential.options_for_create(
-      user: { name: authenticatable.email, id: authenticatable.webauthn_id },
+      user: { name: authenticatable.email_address, id: authenticatable.webauthn_id },
       exclude: authenticatable.passkeys.pluck(:external_id)
     )
   end

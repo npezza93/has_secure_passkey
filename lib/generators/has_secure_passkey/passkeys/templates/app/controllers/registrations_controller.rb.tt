@@ -7,7 +7,7 @@ class RegistrationsController < ApplicationController
   end
 
   def create
-    @person = Person.new(email: params[:person][:email]))
+    @person = Person.new(email_address: params[:person][:email_address])
 
     if @person.valid?
       EmailVerificationMailer.verify(person).deliver_later

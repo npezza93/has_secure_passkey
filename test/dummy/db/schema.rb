@@ -26,7 +26,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_30_012504) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "email"
+    t.string "email_address"
     t.string "webauthn_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
