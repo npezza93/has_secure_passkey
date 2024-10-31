@@ -10,7 +10,7 @@ class RegistrationsController < ApplicationController
     @person = Person.new(email_address: params[:person][:email_address])
 
     if @person.valid?
-      EmailVerificationMailer.verify(person).deliver_later
+      EmailVerificationMailer.verify(@person.attributes).deliver_later
 
       render :create
     else

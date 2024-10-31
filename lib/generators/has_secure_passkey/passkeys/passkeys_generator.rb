@@ -30,6 +30,12 @@ class HasSecurePasskey::PasskeysGenerator < Rails::Generators::Base
     template "app/views/email_verification_mailer/verify.text.erb"
 
     template "test/mailers/previews/email_verification_mailer_preview.rb"
+
+    append_to_file "app/javascript/application.js", "import \"has_secure_passkey\"\n"
+
+    insert_into_file "config/environments/development.rb", "  config.x.url = \"http://localhost:3000\"\n", after: "Rails.application.configure do\n"
+    insert_into_file "config/environments/test.rb", "  config.x.url = \"http://example.com\"\n", after: "Rails.application.configure do\n"
+    insert_into_file "config/environments/production.rb", "  config.x.url = \"https://example.com\"\n", after: "Rails.application.configure do\n"
   end
 
   def configure_application_controller

@@ -4,7 +4,7 @@
       <h2><%%= pluralize(@person.errors.count, "error") %> prohibited this person from being saved:</h2>
 
       <ul>
-        <%% person.errors.each do |error| %>
+        <%% @person.errors.each do |error| %>
           <li><%%= error.full_message %></li>
         <%% end %>
       </ul>

@@ -6,7 +6,7 @@ class HasSecurePasskey::OptionsForCreate
 
     def from_message(message)
       new(**verifier.verify(message).symbolize_keys).tap do
-        it.authenticatable.symbolize_keys! if it.authenticatable.is_a?(Hash)
+        _1.authenticatable.symbolize_keys! if _1.authenticatable.is_a?(Hash)
       end
     end
   end
