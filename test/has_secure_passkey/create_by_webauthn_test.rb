@@ -39,7 +39,7 @@ class HasSecurePasskey::CreateByWebauthnTest < ActiveSupport::TestCase
 
   test "errors when user fails" do
     user = User.create_by_webauthn(params: params(email_address: "  ", webauthn_id: "123"))
-    assert_equal "Email can't be blank", user.errors.full_messages.join(", ")
+    assert_equal "Email address can't be blank", user.errors.full_messages.join(", ")
   end
 
   test "errors when webauthn fails" do
