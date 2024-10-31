@@ -34,7 +34,7 @@ jobs:
           ruby-version: 3.4.0-preview2
           bundler-cache: true
 
+      - name: Setup db
+        run: bin/rails db:setup
       - name: Run tests
-        run: |
-          bin/rails db:test:prepare
-          bin/rails test
+        run: bin/rails test
