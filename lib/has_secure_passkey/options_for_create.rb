@@ -5,7 +5,9 @@ class HasSecurePasskey::OptionsForCreate
     end
 
     def from_message(message)
-      new(**verifier.verify(message).symbolize_keys)
+      new(**verifier.verify(message).symbolize_keys).tap do
+        it.person.symbolize_keys! if it.person.is_a?(Hash)
+      end
     end
   end
 

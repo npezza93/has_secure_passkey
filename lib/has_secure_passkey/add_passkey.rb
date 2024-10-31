@@ -1,7 +1,6 @@
 class HasSecurePasskey::AddPasskey
-  def initialize(authenticatable:, challenge:, params:)
+  def initialize(authenticatable:, params:)
     @authenticatable = authenticatable
-    @challenge = challenge
     @params = params
   end
 
@@ -16,7 +15,7 @@ class HasSecurePasskey::AddPasskey
 
   private
 
-  attr_reader :authenticatable, :challenge, :params
+  attr_reader :authenticatable, :params
 
   delegate_missing_to :credential
 
@@ -35,5 +34,12 @@ class HasSecurePasskey::AddPasskey
     @passkey ||= authenticatable.passkeys.build(
       external_id: credential.id, public_key:, sign_count:
     )
+  end
+
+  def challenge
+    HasSecurePasskey::OptionsForCreate.
+      from_message(params[:web_authn_message]).challenge
+  rescue ActiveSupport::MessageVerifier::InvalidSignature
+    ""
   end
 end

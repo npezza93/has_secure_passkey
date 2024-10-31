@@ -5,6 +5,11 @@
 
 Rails.application.configure do
   config.x.url = "http://example.com"
+  config.active_record.encryption.primary_key = "hK0B2i1XGm1PNlBXKmSwf4UwsOlyv4bE"
+  config.active_record.encryption.deterministic_key = "TUeK4R4Uryln19BhCKygHv7h8jHEADZo"
+  config.active_record.encryption.key_derivation_salt = "lbOJRarh9tEkEe6oWSoPT43YYxcou3Gc"
+
+  config.active_record.encryption.encrypt_fixtures = true
 
   # Settings specified here will take precedence over those in config/application.rb.
 

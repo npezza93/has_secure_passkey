@@ -12,15 +12,15 @@ module HasSecurePasskey::ActiveRecordHelpers
       WebAuthn.generate_user_id
     end
 
-    define_singleton_method :authenticate_by do |challenge:, params:|
+    define_singleton_method :authenticate_by do |params:|
       HasSecurePasskey::AuthenticateBy.
-        new(model: self, challenge:, params:).
+        new(model: self, params:).
         authenticated
     end
 
-    define_method :add_passkey do |challenge:, params:|
+    define_method :add_passkey do |params:|
       HasSecurePasskey::AddPasskey.
-        new(authenticatable: self, challenge:, params:).
+        new(authenticatable: self, params:).
         save
     end
   end

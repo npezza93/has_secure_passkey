@@ -1,7 +1,6 @@
 class HasSecurePasskey::AuthenticateBy
-  def initialize(model:, challenge:, params:)
+  def initialize(model:, params:)
     @model = model
-    @challenge = challenge
     @params = params
   end
 
@@ -16,7 +15,7 @@ class HasSecurePasskey::AuthenticateBy
 
   private
 
-  attr_reader :challenge, :params, :model
+  attr_reader :params, :model
 
   def valid?
     passkey.present? && verified? &&
@@ -39,5 +38,12 @@ class HasSecurePasskey::AuthenticateBy
                                           sign_count: passkey.sign_count)
   rescue WebAuthn::Error, WebAuthn::SignCountVerificationError
     false
+  end
+
+  def challenge
+    HasSecurePasskey::OptionsForGet.
+      from_message(params[:web_authn_message]).challenge
+  rescue ActiveSupport::MessageVerifier::InvalidSignature
+    ""
   end
 end
