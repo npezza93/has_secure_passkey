@@ -1,6 +1,9 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
+  config.active_record.encryption.primary_key = "hK0B2i1XGm1PNlBXKmSwf4UwsOlyv4bE"
+  config.active_record.encryption.deterministic_key = "TUeK4R4Uryln19BhCKygHv7h8jHEADZo"
+  config.active_record.encryption.key_derivation_salt = "lbOJRarh9tEkEe6oWSoPT43YYxcou3Gc"
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Make code changes take effect immediately without server restart.

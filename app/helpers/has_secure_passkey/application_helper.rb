@@ -1,6 +1,6 @@
 module HasSecurePasskey
   module ApplicationHelper
-    def prompt_for_new_passkey(callback:, current_authenticatable: nil **options)
+    def prompt_for_new_passkey(callback:, current_authenticatable: nil, **options)
       options_for_create =
         if current_authenticatable.present?
           HasSecurePasskey::OptionsForCreate.new(authenticatable: current_authenticatable)

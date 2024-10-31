@@ -26,6 +26,6 @@ class HasSecurePasskey::AddPasskeyTest < ActiveSupport::TestCase
   private
 
   def enc_message(challenge)
-    HasSecurePasskey::OptionsForCreate.new(person: users(:one), challenge:).message
+    HasSecurePasskey::OptionsForCreate.new(authenticatable: users(:one), challenge:).message
   end
 end
