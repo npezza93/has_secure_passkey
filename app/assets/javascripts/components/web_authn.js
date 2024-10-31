@@ -53,11 +53,11 @@ export default class WebAuthn extends HTMLElement {
     let event
 
     if (error.code === 0 && error.name === "NotAllowedError") {
-      event = new CustomEvent("web-authn-error", { detail: "That didn't work. Either it was cancelled or took too long. Please try again." });
+      event = new CustomEvent("web-authn-error", { bubbles: true, detail: "That didn't work. Either it was cancelled or took too long. Please try again." });
     } else if (error.code === 11 && error.name === "InvalidStateError") {
-      event = new CustomEvent("web-authn-error", { detail: "We couldn't add that security key. Looks like you may have already registered it." });
+      event = new CustomEvent("web-authn-error", { bubbles: true, detail: "We couldn't add that security key. Looks like you may have already registered it." });
     } else {
-      event = new CustomEvent("web-authn-error", { detail: error.message });
+      event = new CustomEvent("web-authn-error", { bubbles: true, detail: error.message });
     }
 
     this.dispatchEvent(event);
