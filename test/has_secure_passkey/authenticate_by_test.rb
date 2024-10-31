@@ -18,7 +18,7 @@ class HasSecurePasskey::AuthenticateByTest < ActiveSupport::TestCase
 
     login = HasSecurePasskey::AuthenticateBy.new(
       model: User, params: ActionController::Parameters.new(
-        web_authn_message: enc_message(challenge), **@client.get(challenge:)
+        webauthn_message: enc_message(challenge), **@client.get(challenge:)
       )
     )
 
@@ -31,7 +31,7 @@ class HasSecurePasskey::AuthenticateByTest < ActiveSupport::TestCase
 
     login = HasSecurePasskey::AuthenticateBy.new(
       model: User, params: ActionController::Parameters.new(
-        web_authn_message: enc_message("blah"), **@client.get(challenge:)
+        webauthn_message: enc_message("blah"), **@client.get(challenge:)
       )
     )
 

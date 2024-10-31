@@ -38,7 +38,7 @@ class HasSecurePasskey::AddPasskey
 
   def challenge
     HasSecurePasskey::OptionsForCreate.
-      from_message(params[:web_authn_message]).challenge
+      from_message(params[:webauthn_message]).challenge
   rescue ActiveSupport::MessageVerifier::InvalidSignature
     ""
   end

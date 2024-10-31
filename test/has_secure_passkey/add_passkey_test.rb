@@ -4,7 +4,7 @@ class HasSecurePasskey::AddPasskeyTest < ActiveSupport::TestCase
   test "valid" do
     client = WebAuthn::FakeClient.new("http://example.com")
     challenge = WebAuthn::Credential.options_for_get.challenge
-    params = ActionController::Parameters.new(web_authn_message: enc_message(challenge),
+    params = ActionController::Parameters.new(webauthn_message: enc_message(challenge),
       **client.create(challenge:))
 
     assert_difference -> { users(:one).passkeys.count }, 1 do
@@ -15,7 +15,7 @@ class HasSecurePasskey::AddPasskeyTest < ActiveSupport::TestCase
   test "not valid" do
     client = WebAuthn::FakeClient.new
     challenge = WebAuthn::Credential.options_for_get.challenge
-    params = ActionController::Parameters.new(web_authn_message: enc_message(challenge),
+    params = ActionController::Parameters.new(webauthn_message: enc_message(challenge),
       **client.create(challenge:))
 
     assert_no_difference -> { users(:one).passkeys.count } do

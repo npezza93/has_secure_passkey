@@ -55,7 +55,7 @@ class HasSecurePasskey::CreateByWebauthnTest < ActiveSupport::TestCase
 
   def params(challenge: @challenge, **user_params)
     ActionController::Parameters.new(
-      web_authn_message: HasSecurePasskey::OptionsForCreate.new(
+      webauthn_message: HasSecurePasskey::OptionsForCreate.new(
         authenticatable: User.new(user_params), challenge:
       ).message,
       **@client.create(challenge: @challenge)

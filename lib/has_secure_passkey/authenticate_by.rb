@@ -42,7 +42,7 @@ class HasSecurePasskey::AuthenticateBy
 
   def challenge
     HasSecurePasskey::OptionsForGet.
-      from_message(params[:web_authn_message]).challenge
+      from_message(params[:webauthn_message]).challenge
   rescue ActiveSupport::MessageVerifier::InvalidSignature
     ""
   end

@@ -353,7 +353,7 @@ class WebAuthn extends HTMLElement {
       this.showProgress();
       const { response, redirected } = await post(this.callback, {
         responseKind: "turbo-stream",
-        body: JSON.stringify(Object.assign(credential, { web_authn_message: this.message }))
+        body: JSON.stringify(Object.assign(credential, { webauthn_message: this.message }))
       });
       this.hideProgress();
       if (response.ok && redirected) {

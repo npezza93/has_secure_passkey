@@ -6,7 +6,7 @@ module HasSecurePasskey
           HasSecurePasskey::OptionsForCreate.new(authenticatable: current_authenticatable)
         else
           HasSecurePasskey::OptionsForCreate.
-            from_message(params[:web_authn_message])
+            from_message(params[:webauthn_message])
         end
 
       tag.web_authn(nil, action: :create, callback:,
