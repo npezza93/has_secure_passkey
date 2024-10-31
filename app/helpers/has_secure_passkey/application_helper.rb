@@ -24,5 +24,9 @@ module HasSecurePasskey
         message: options_for_get.message,
         **options)
     end
+
+    def button_to_passkey_login(text, path, **options)
+      button_to text, has_secure_passkey.challenges_path(path), **options
+    end
   end
 end

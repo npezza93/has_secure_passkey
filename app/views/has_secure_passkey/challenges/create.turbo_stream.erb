@@ -1,0 +1,5 @@
+<%= turbo_stream.remove_all "web-authn" %>
+
+<%= turbo_stream.append_all "body" do %>
+  <%= login_with_passkey(callback: params[:session_path]) %>
+<% end %>
