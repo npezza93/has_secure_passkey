@@ -1,4 +1,4 @@
-<%%= form_with model: @person, url: registration_path do |f| %>
+<%%= form_with model: @person, url: registration_path, id: "new-registration" do |f| %>
   <%% if @person.errors.any? %>
     <div style="color: red">
       <h2><%%= pluralize(@person.errors.count, "error") %> prohibited this person from being saved:</h2>
