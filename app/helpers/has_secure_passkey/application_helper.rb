@@ -25,8 +25,8 @@ module HasSecurePasskey
         **options)
     end
 
-    def button_to_passkey_login(text, path, **options)
-      button_to text, has_secure_passkey.challenges_path(path), **options
+    def button_to_passkey_login(text, path, **options, &block)
+      button_to text, has_secure_passkey.challenges_path(path), **options, &block
     end
   end
 end
