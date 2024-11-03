@@ -1,7 +1,6 @@
 module HasSecurePasskey
   class Engine < ::Rails::Engine
     isolate_namespace HasSecurePasskey
-    config.eager_load_namespaces << HasSecurePasskey
     config.autoload_once_paths = %W(
       #{root}/app/helpers
     )
