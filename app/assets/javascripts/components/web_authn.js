@@ -11,7 +11,6 @@ export default class WebAuthn extends HTMLElement {
   connectedCallback() {
     this.progressBar = Turbo.navigator.delegate.adapter.progressBar
     this.style.display = "none"
-    this.setAttribute("id", "webauthn")
     this.setAttribute("data-turbo-temporary", 1)
     this.run()
   }
