@@ -349,7 +349,7 @@ class WebAuthn extends HTMLElement {
     this.run();
   }
   run() {
-    window.WebAuthn = WebAuthn;
+    window.WebAuthn = exports__github_webauthn_json;
     window.webauthn_options = this.options;
     console.log("hi");
     exports__github_webauthn_json[this.action](this.options).then(async (credential) => {
