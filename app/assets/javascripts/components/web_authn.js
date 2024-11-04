@@ -17,9 +17,6 @@ export default class WebAuthn extends HTMLElement {
   }
 
   run() {
-    window.WebAuthn = WebAuthnJSON
-    window.webauthn_options = this.options
-    console.log("hi")
     WebAuthnJSON[this.action](this.options).
       then(async (credential) => {
         this.showProgress()
