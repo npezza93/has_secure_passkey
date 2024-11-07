@@ -1,5 +1,5 @@
-import * as WebAuthnJSON from "../@github--webauthn-json"
-import { post } from "../@rails--request"
+import * as WebAuthnJSON from "@github/webauthn-json"
+import { post } from "@rails/request"
 
 export default class WebAuthn extends HTMLElement {
   static observedAttributes = ["action", "callback", "options"];
@@ -10,7 +10,6 @@ export default class WebAuthn extends HTMLElement {
 
   connectedCallback() {
     this.progressBar = Turbo.navigator.delegate.adapter.progressBar
-    this.style.display = "none"
     this.setAttribute("data-turbo-temporary", 1)
     this.setAttribute("data-turbo-track", "reload")
     this.run()

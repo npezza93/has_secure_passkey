@@ -12,28 +12,12 @@ var __export = (target, all) => {
 // app/assets/javascripts/@github--webauthn-json.js
 var exports__github_webauthn_json = {};
 __export(exports__github_webauthn_json, {
-  supported: () => {
-    {
-      return supported;
-    }
-  },
-  schema: () => {
-    {
-      return c;
-    }
-  },
-  get: () => {
-    {
-      return get;
-    }
-  },
-  create: () => {
-    {
-      return create;
-    }
-  }
+  supported: () => supported,
+  schema: () => c,
+  get: () => get,
+  create: () => create
 });
-var base64urlToBuffer = function(e) {
+function base64urlToBuffer(e) {
   const r = "==".slice(0, (4 - e.length % 4) % 4);
   const t = e.replace(/-/g, "+").replace(/_/g, "/") + r;
   const n = atob(t);
@@ -42,8 +26,8 @@ var base64urlToBuffer = function(e) {
   for (let e2 = 0;e2 < n.length; e2++)
     o[e2] = n.charCodeAt(e2);
   return i;
-};
-var bufferToBase64url = function(e) {
+}
+function bufferToBase64url(e) {
   const r = new Uint8Array(e);
   let t = "";
   for (const e2 of r)
@@ -51,63 +35,40 @@ var bufferToBase64url = function(e) {
   const n = btoa(t);
   const i = n.replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
   return i;
-};
-var convert = function(t, n, i) {
+}
+var e = "copy";
+var r = "convert";
+function convert(t, n, i) {
   if (n === e)
     return i;
   if (n === r)
     return t(i);
   if (n instanceof Array)
-    return i.map((e) => convert(t, n[0], e));
+    return i.map((e2) => convert(t, n[0], e2));
   if (n instanceof Object) {
-    const e = {};
-    for (const [r, o] of Object.entries(n)) {
+    const e2 = {};
+    for (const [r2, o] of Object.entries(n)) {
       if (o.derive) {
-        const e2 = o.derive(i);
-        e2 !== undefined && (i[r] = e2);
+        const e3 = o.derive(i);
+        e3 !== undefined && (i[r2] = e3);
       }
-      if (r in i)
-        i[r] != null ? e[r] = convert(t, o.schema, i[r]) : e[r] = null;
+      if (r2 in i)
+        i[r2] != null ? e2[r2] = convert(t, o.schema, i[r2]) : e2[r2] = null;
       else if (o.required)
-        throw new Error(`Missing key: ${r}`);
+        throw new Error(`Missing key: ${r2}`);
     }
-    return e;
+    return e2;
   }
-};
-var derived = function(e, r) {
-  return { required: true, schema: e, derive: r };
-};
-var required = function(e) {
-  return { required: true, schema: e };
-};
-var optional = function(e) {
-  return { required: false, schema: e };
-};
-var createRequestFromJSON = function(e) {
-  return convert(base64urlToBuffer, o, e);
-};
-var createResponseToJSON = function(e) {
-  return convert(bufferToBase64url, a, e);
-};
-async function create(e) {
-  const r = await navigator.credentials.create(createRequestFromJSON(e));
-  return createResponseToJSON(r);
 }
-var getRequestFromJSON = function(e) {
-  return convert(base64urlToBuffer, u, e);
-};
-var getResponseToJSON = function(e) {
-  return convert(bufferToBase64url, s, e);
-};
-async function get(e) {
-  const r = await navigator.credentials.get(getRequestFromJSON(e));
-  return getResponseToJSON(r);
+function derived(e2, r2) {
+  return { required: true, schema: e2, derive: r2 };
 }
-var supported = function() {
-  return !!(navigator.credentials && navigator.credentials.create && navigator.credentials.get && window.PublicKeyCredential);
-};
-var e = "copy";
-var r = "convert";
+function required(e2) {
+  return { required: true, schema: e2 };
+}
+function optional(e2) {
+  return { required: false, schema: e2 };
+}
 var t = { type: required(e), id: required(r), transports: optional(e) };
 var n = { appid: optional(e), appidExclude: optional(e), credProps: optional(e) };
 var i = { appid: optional(e), appidExclude: optional(e), credProps: optional(e) };
@@ -119,46 +80,31 @@ var a = { type: required(e), id: required(e), rawId: required(r), authenticatorA
 var u = { mediation: optional(e), publicKey: required({ challenge: required(r), timeout: optional(e), rpId: optional(e), allowCredentials: optional([t]), userVerification: optional(e), extensions: optional(n) }), signal: optional(e) };
 var s = { type: required(e), id: required(e), rawId: required(r), authenticatorAttachment: optional(e), response: required({ clientDataJSON: required(r), authenticatorData: required(r), signature: required(r), userHandle: required(r) }), clientExtensionResults: derived(i, (e2) => e2.getClientExtensionResults()) };
 var c = { credentialCreationOptions: o, publicKeyCredentialWithAttestation: a, credentialRequestOptions: u, publicKeyCredentialWithAssertion: s };
+function createRequestFromJSON(e2) {
+  return convert(base64urlToBuffer, o, e2);
+}
+function createResponseToJSON(e2) {
+  return convert(bufferToBase64url, a, e2);
+}
+async function create(e2) {
+  const r2 = await navigator.credentials.create(createRequestFromJSON(e2));
+  return createResponseToJSON(r2);
+}
+function getRequestFromJSON(e2) {
+  return convert(base64urlToBuffer, u, e2);
+}
+function getResponseToJSON(e2) {
+  return convert(bufferToBase64url, s, e2);
+}
+async function get(e2) {
+  const r2 = await navigator.credentials.get(getRequestFromJSON(e2));
+  return getResponseToJSON(r2);
+}
+function supported() {
+  return !!(navigator.credentials && navigator.credentials.create && navigator.credentials.get && window.PublicKeyCredential);
+}
 
 // app/assets/javascripts/@rails--request.js
-var getCookie = function(t2) {
-  const e2 = document.cookie ? document.cookie.split("; ") : [];
-  const n2 = `${encodeURIComponent(t2)}=`;
-  const s2 = e2.find((t3) => t3.startsWith(n2));
-  if (s2) {
-    const t3 = s2.split("=").slice(1).join("=");
-    if (t3)
-      return decodeURIComponent(t3);
-  }
-};
-var compact = function(t2) {
-  const e2 = {};
-  for (const n2 in t2) {
-    const s2 = t2[n2];
-    s2 !== undefined && (e2[n2] = s2);
-  }
-  return e2;
-};
-var metaContent = function(t2) {
-  const e2 = document.head.querySelector(`meta[name="${t2}"]`);
-  return e2 && e2.content;
-};
-var stringEntriesFromFormData = function(t2) {
-  return [...t2].reduce((t3, [e2, n2]) => t3.concat(typeof n2 === "string" ? [[e2, n2]] : []), []);
-};
-var mergeEntries = function(t2, e2) {
-  for (const [n2, s2] of e2)
-    if (!(s2 instanceof window.File))
-      if (t2.has(n2) && !n2.includes("[]")) {
-        t2.delete(n2);
-        t2.set(n2, s2);
-      } else
-        t2.append(n2, s2);
-};
-async function post(t2, e2) {
-  const n2 = new FetchRequest("post", t2, e2);
-  return n2.perform();
-}
 class FetchResponse {
   constructor(t2) {
     this.response = t2;
@@ -232,6 +178,40 @@ class RequestInterceptor {
   static reset() {
     this.interceptor = undefined;
   }
+}
+function getCookie(t2) {
+  const e2 = document.cookie ? document.cookie.split("; ") : [];
+  const n2 = `${encodeURIComponent(t2)}=`;
+  const s2 = e2.find((t3) => t3.startsWith(n2));
+  if (s2) {
+    const t3 = s2.split("=").slice(1).join("=");
+    if (t3)
+      return decodeURIComponent(t3);
+  }
+}
+function compact(t2) {
+  const e2 = {};
+  for (const n2 in t2) {
+    const s2 = t2[n2];
+    s2 !== undefined && (e2[n2] = s2);
+  }
+  return e2;
+}
+function metaContent(t2) {
+  const e2 = document.head.querySelector(`meta[name="${t2}"]`);
+  return e2 && e2.content;
+}
+function stringEntriesFromFormData(t2) {
+  return [...t2].reduce((t3, [e2, n2]) => t3.concat(typeof n2 === "string" ? [[e2, n2]] : []), []);
+}
+function mergeEntries(t2, e2) {
+  for (const [n2, s2] of e2)
+    if (!(s2 instanceof window.File))
+      if (t2.has(n2) && !n2.includes("[]")) {
+        t2.delete(n2);
+        t2.set(n2, s2);
+      } else
+        t2.append(n2, s2);
 }
 
 class FetchRequest {
@@ -334,6 +314,10 @@ class FetchRequest {
     return e2 && !t2 ? JSON.stringify(this.body) : this.body;
   }
 }
+async function post(t2, e2) {
+  const n2 = new FetchRequest("post", t2, e2);
+  return n2.perform();
+}
 
 // app/assets/javascripts/components/web_authn.js
 class WebAuthn extends HTMLElement {
@@ -343,7 +327,6 @@ class WebAuthn extends HTMLElement {
   }
   connectedCallback() {
     this.progressBar = Turbo.navigator.delegate.adapter.progressBar;
-    this.style.display = "none";
     this.setAttribute("data-turbo-temporary", 1);
     this.setAttribute("data-turbo-track", "reload");
     this.run();
