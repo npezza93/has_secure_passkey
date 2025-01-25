@@ -20,7 +20,7 @@ class HasSecurePasskey::OptionsForCreate
   def message
     self.class.verifier.generate(
       { challenge:, options:,
-        authenticatable: authenticatable.as_json(only: %i(email_address webauthn_id)) }.as_json
+        authenticatable: authenticatable.as_json(only: serializable_attributes) }.as_json
     )
   end
 
@@ -45,5 +45,9 @@ class HasSecurePasskey::OptionsForCreate
       user: { name: authenticatable.email_address, id: authenticatable.webauthn_id },
       exclude: authenticatable.passkeys.pluck(:external_id)
     )
+  end
+
+  def serializable_attributes
+    authenticatable.class.column_names - ["id", "created_at", "updated_at"]
   end
 end
