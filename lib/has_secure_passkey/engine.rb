@@ -7,7 +7,7 @@ module HasSecurePasskey
 
     initializer "has_secure_passkey.webauthn" do |app|
       WebAuthn.configure do |config|
-        config.origin = ENV.fetch("APP_URL", app.config.x.url)
+        config.allowed_origins = [ ENV.fetch("APP_URL", app.config.x.url) ]
         config.rp_name = app.name
         config.credential_options_timeout = 120_000
       end
