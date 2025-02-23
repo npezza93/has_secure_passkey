@@ -2,7 +2,7 @@ require "test_helper"
 
 class HasSecurePasskey::CreateByWebauthnTest < ActiveSupport::TestCase
   setup do
-    @client = WebAuthn::FakeClient.new(WebAuthn.configuration.origin)
+    @client = WebAuthn::FakeClient.new(WebAuthn.configuration.allowed_origins[0])
     @challenge = WebAuthn::Credential.options_for_get.challenge
   end
 

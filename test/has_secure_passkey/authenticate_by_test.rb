@@ -13,7 +13,7 @@ class HasSecurePasskey::AuthenticateByTest < ActiveSupport::TestCase
   end
 
   test "#authenticated" do
-    @client.create(rp_id: URI.parse(WebAuthn.configuration.origin).host)
+    @client.create(rp_id: URI.parse(WebAuthn.configuration.allowed_origins[0]).host)
     challenge = WebAuthn::Credential.options_for_get.challenge
 
     login = HasSecurePasskey::AuthenticateBy.new(
@@ -26,7 +26,7 @@ class HasSecurePasskey::AuthenticateByTest < ActiveSupport::TestCase
   end
 
   test "#when verification fails" do
-    @client.create(rp_id: URI.parse(WebAuthn.configuration.origin).host)
+    @client.create(rp_id: URI.parse(WebAuthn.configuration.allowed_origins[0]).host)
     challenge = WebAuthn::Credential.options_for_get.challenge
 
     login = HasSecurePasskey::AuthenticateBy.new(
