@@ -1,5 +1,4 @@
-import * as WebAuthnJSON from "@github/webauthn-json"
-import { post } from "@rails/request"
+import { post } from "@rails/request.js"
 
 export default class WebAuthn extends HTMLElement {
   static observedAttributes = ["action", "callback", "options"];
@@ -16,7 +15,7 @@ export default class WebAuthn extends HTMLElement {
   }
 
   run() {
-    WebAuthnJSON[this.action](this.options).
+    navigator.credentials[this.action](this.publicKey).
       then(async (credential) => {
         this.showProgress()
 
@@ -76,5 +75,13 @@ export default class WebAuthn extends HTMLElement {
 
   get message() {
     return this.getAttribute('message');
+  }
+
+  get publicKey() {
+    if (this.action === "create") {
+      return PublicKeyCredential.parseCreationOptionsFromJSON(this.options);
+    } else {
+      return PublicKeyCredential.parseRequestOptionsFromJSON(this.options);
+    }
   }
 }

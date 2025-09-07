@@ -6,7 +6,6 @@
     "build": "bun run bun.config.js"
   },
   "dependencies": {
-    "@github/webauthn-json": "^2.1.1",
-    "@rails/request.js": "^0.0.11"
+    "@rails/request.js": "^0.0.12"
   }
 }

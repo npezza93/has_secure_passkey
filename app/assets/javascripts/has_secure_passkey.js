@@ -1,113 +1,7 @@
-var __defProp = Object.defineProperty;
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, {
-      get: all[name],
-      enumerable: true,
-      configurable: true,
-      set: (newValue) => all[name] = () => newValue
-    });
-};
-
-// app/assets/javascripts/@github--webauthn-json.js
-var exports__github_webauthn_json = {};
-__export(exports__github_webauthn_json, {
-  supported: () => supported,
-  schema: () => c,
-  get: () => get,
-  create: () => create
-});
-function base64urlToBuffer(e) {
-  const r = "==".slice(0, (4 - e.length % 4) % 4);
-  const t = e.replace(/-/g, "+").replace(/_/g, "/") + r;
-  const n = atob(t);
-  const i = new ArrayBuffer(n.length);
-  const o = new Uint8Array(i);
-  for (let e2 = 0;e2 < n.length; e2++)
-    o[e2] = n.charCodeAt(e2);
-  return i;
-}
-function bufferToBase64url(e) {
-  const r = new Uint8Array(e);
-  let t = "";
-  for (const e2 of r)
-    t += String.fromCharCode(e2);
-  const n = btoa(t);
-  const i = n.replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
-  return i;
-}
-var e = "copy";
-var r = "convert";
-function convert(t, n, i) {
-  if (n === e)
-    return i;
-  if (n === r)
-    return t(i);
-  if (n instanceof Array)
-    return i.map((e2) => convert(t, n[0], e2));
-  if (n instanceof Object) {
-    const e2 = {};
-    for (const [r2, o] of Object.entries(n)) {
-      if (o.derive) {
-        const e3 = o.derive(i);
-        e3 !== undefined && (i[r2] = e3);
-      }
-      if (r2 in i)
-        i[r2] != null ? e2[r2] = convert(t, o.schema, i[r2]) : e2[r2] = null;
-      else if (o.required)
-        throw new Error(`Missing key: ${r2}`);
-    }
-    return e2;
-  }
-}
-function derived(e2, r2) {
-  return { required: true, schema: e2, derive: r2 };
-}
-function required(e2) {
-  return { required: true, schema: e2 };
-}
-function optional(e2) {
-  return { required: false, schema: e2 };
-}
-var t = { type: required(e), id: required(r), transports: optional(e) };
-var n = { appid: optional(e), appidExclude: optional(e), credProps: optional(e) };
-var i = { appid: optional(e), appidExclude: optional(e), credProps: optional(e) };
-var o = { publicKey: required({ rp: required(e), user: required({ id: required(r), name: required(e), displayName: required(e) }), challenge: required(r), pubKeyCredParams: required(e), timeout: optional(e), excludeCredentials: optional([t]), authenticatorSelection: optional(e), attestation: optional(e), extensions: optional(n) }), signal: optional(e) };
-var a = { type: required(e), id: required(e), rawId: required(r), authenticatorAttachment: optional(e), response: required({ clientDataJSON: required(r), attestationObject: required(r), transports: derived(e, (e2) => {
-  var r2;
-  return ((r2 = e2.getTransports) == null ? undefined : r2.call(e2)) || [];
-}) }), clientExtensionResults: derived(i, (e2) => e2.getClientExtensionResults()) };
-var u = { mediation: optional(e), publicKey: required({ challenge: required(r), timeout: optional(e), rpId: optional(e), allowCredentials: optional([t]), userVerification: optional(e), extensions: optional(n) }), signal: optional(e) };
-var s = { type: required(e), id: required(e), rawId: required(r), authenticatorAttachment: optional(e), response: required({ clientDataJSON: required(r), authenticatorData: required(r), signature: required(r), userHandle: required(r) }), clientExtensionResults: derived(i, (e2) => e2.getClientExtensionResults()) };
-var c = { credentialCreationOptions: o, publicKeyCredentialWithAttestation: a, credentialRequestOptions: u, publicKeyCredentialWithAssertion: s };
-function createRequestFromJSON(e2) {
-  return convert(base64urlToBuffer, o, e2);
-}
-function createResponseToJSON(e2) {
-  return convert(bufferToBase64url, a, e2);
-}
-async function create(e2) {
-  const r2 = await navigator.credentials.create(createRequestFromJSON(e2));
-  return createResponseToJSON(r2);
-}
-function getRequestFromJSON(e2) {
-  return convert(base64urlToBuffer, u, e2);
-}
-function getResponseToJSON(e2) {
-  return convert(bufferToBase64url, s, e2);
-}
-async function get(e2) {
-  const r2 = await navigator.credentials.get(getRequestFromJSON(e2));
-  return getResponseToJSON(r2);
-}
-function supported() {
-  return !!(navigator.credentials && navigator.credentials.create && navigator.credentials.get && window.PublicKeyCredential);
-}
-
-// app/assets/javascripts/@rails--request.js
+// node_modules/@rails/request.js/src/fetch_response.js
 class FetchResponse {
-  constructor(t2) {
-    this.response = t2;
+  constructor(response) {
+    this.response = response;
   }
   get statusCode() {
     return this.response.status;
@@ -128,17 +22,23 @@ class FetchResponse {
     return this.response.headers.get("WWW-Authenticate");
   }
   get contentType() {
-    const t2 = this.response.headers.get("Content-Type") || "";
-    return t2.replace(/;.*$/, "");
+    const contentType = this.response.headers.get("Content-Type") || "";
+    return contentType.replace(/;.*$/, "");
   }
   get headers() {
     return this.response.headers;
   }
   get html() {
-    return this.contentType.match(/^(application|text)\/(html|xhtml\+xml)$/) ? this.text : Promise.reject(new Error(`Expected an HTML response but got "${this.contentType}" instead`));
+    if (this.contentType.match(/^(application|text)\/(html|xhtml\+xml)$/)) {
+      return this.text;
+    }
+    return Promise.reject(new Error(`Expected an HTML response but got "${this.contentType}" instead`));
   }
   get json() {
-    return this.contentType.match(/^application\/.*json$/) ? this.responseJson || (this.responseJson = this.response.json()) : Promise.reject(new Error(`Expected a JSON response but got "${this.contentType}" instead`));
+    if (this.contentType.match(/^application\/.*json$/)) {
+      return this.responseJson || (this.responseJson = this.response.json());
+    }
+    return Promise.reject(new Error(`Expected a JSON response but got "${this.contentType}" instead`));
   }
   get text() {
     return this.responseText || (this.responseText = this.response.text());
@@ -150,27 +50,38 @@ class FetchResponse {
     return this.contentType.match(/\b(?:java|ecma)script\b/);
   }
   async renderTurboStream() {
-    if (!this.isTurboStream)
+    if (this.isTurboStream) {
+      if (window.Turbo) {
+        await window.Turbo.renderStreamMessage(await this.text);
+      } else {
+        console.warn("You must set `window.Turbo = Turbo` to automatically process Turbo Stream events with request.js");
+      }
+    } else {
       return Promise.reject(new Error(`Expected a Turbo Stream response but got "${this.contentType}" instead`));
-    window.Turbo ? await window.Turbo.renderStreamMessage(await this.text) : console.warn("You must set `window.Turbo = Turbo` to automatically process Turbo Stream events with request.js");
+    }
   }
   async activeScript() {
-    if (!this.isScript)
+    if (this.isScript) {
+      const script = document.createElement("script");
+      const metaTag = document.querySelector("meta[name=csp-nonce]");
+      if (metaTag) {
+        const nonce = metaTag.nonce === "" ? metaTag.content : metaTag.nonce;
+        if (nonce) {
+          script.setAttribute("nonce", nonce);
+        }
+      }
+      script.innerHTML = await this.text;
+      document.body.appendChild(script);
+    } else {
       return Promise.reject(new Error(`Expected a Script response but got "${this.contentType}" instead`));
-    {
-      const t2 = document.createElement("script");
-      const e2 = document.querySelector("meta[name=csp-nonce]");
-      const n2 = e2 && e2.content;
-      n2 && t2.setAttribute("nonce", n2);
-      t2.innerHTML = await this.text;
-      document.body.appendChild(t2);
     }
   }
 }
 
+// node_modules/@rails/request.js/src/request_interceptor.js
 class RequestInterceptor {
-  static register(t2) {
-    this.interceptor = t2;
+  static register(interceptor) {
+    this.interceptor = interceptor;
   }
   static get() {
     return this.interceptor;
@@ -179,90 +90,130 @@ class RequestInterceptor {
     this.interceptor = undefined;
   }
 }
-function getCookie(t2) {
-  const e2 = document.cookie ? document.cookie.split("; ") : [];
-  const n2 = `${encodeURIComponent(t2)}=`;
-  const s2 = e2.find((t3) => t3.startsWith(n2));
-  if (s2) {
-    const t3 = s2.split("=").slice(1).join("=");
-    if (t3)
-      return decodeURIComponent(t3);
+
+// node_modules/@rails/request.js/src/lib/utils.js
+function getCookie(name) {
+  const cookies = document.cookie ? document.cookie.split("; ") : [];
+  const prefix = `${encodeURIComponent(name)}=`;
+  const cookie = cookies.find((cookie2) => cookie2.startsWith(prefix));
+  if (cookie) {
+    const value = cookie.split("=").slice(1).join("=");
+    if (value) {
+      return decodeURIComponent(value);
+    }
   }
 }
-function compact(t2) {
-  const e2 = {};
-  for (const n2 in t2) {
-    const s2 = t2[n2];
-    s2 !== undefined && (e2[n2] = s2);
+function compact(object) {
+  const result = {};
+  for (const key in object) {
+    const value = object[key];
+    if (value !== undefined) {
+      result[key] = value;
+    }
   }
-  return e2;
+  return result;
 }
-function metaContent(t2) {
-  const e2 = document.head.querySelector(`meta[name="${t2}"]`);
-  return e2 && e2.content;
+function metaContent(name) {
+  const element = document.head.querySelector(`meta[name="${name}"]`);
+  return element && element.content;
 }
-function stringEntriesFromFormData(t2) {
-  return [...t2].reduce((t3, [e2, n2]) => t3.concat(typeof n2 === "string" ? [[e2, n2]] : []), []);
+function stringEntriesFromFormData(formData) {
+  return [...formData].reduce((entries, [name, value]) => {
+    return entries.concat(typeof value === "string" ? [[name, value]] : []);
+  }, []);
 }
-function mergeEntries(t2, e2) {
-  for (const [n2, s2] of e2)
-    if (!(s2 instanceof window.File))
-      if (t2.has(n2) && !n2.includes("[]")) {
-        t2.delete(n2);
-        t2.set(n2, s2);
-      } else
-        t2.append(n2, s2);
+function mergeEntries(searchParams, entries) {
+  for (const [name, value] of entries) {
+    if (value instanceof window.File)
+      continue;
+    if (searchParams.has(name) && !name.includes("[]")) {
+      searchParams.delete(name);
+      searchParams.set(name, value);
+    } else {
+      searchParams.append(name, value);
+    }
+  }
 }
 
+// node_modules/@rails/request.js/src/fetch_request.js
 class FetchRequest {
-  constructor(t2, e2, n2 = {}) {
-    this.method = t2;
-    this.options = n2;
-    this.originalUrl = e2.toString();
+  constructor(method, url, options = {}) {
+    this.method = method;
+    this.options = options;
+    this.originalUrl = url.toString();
   }
   async perform() {
     try {
-      const t3 = RequestInterceptor.get();
-      t3 && await t3(this);
-    } catch (t3) {
-      console.error(t3);
+      const requestInterceptor = RequestInterceptor.get();
+      if (requestInterceptor) {
+        await requestInterceptor(this);
+      }
+    } catch (error) {
+      console.error(error);
     }
-    const t2 = this.responseKind === "turbo-stream" && window.Turbo ? window.Turbo.fetch : window.fetch;
-    const e2 = new FetchResponse(await t2(this.url, this.fetchOptions));
-    if (e2.unauthenticated && e2.authenticationURL)
-      return Promise.reject(window.location.href = e2.authenticationURL);
-    e2.isScript && await e2.activeScript();
-    const n2 = e2.ok || e2.unprocessableEntity;
-    n2 && e2.isTurboStream && await e2.renderTurboStream();
-    return e2;
+    const fetch = this.responseKind === "turbo-stream" && window.Turbo ? window.Turbo.fetch : window.fetch;
+    const response = new FetchResponse(await fetch(this.url, this.fetchOptions));
+    if (response.unauthenticated && response.authenticationURL) {
+      return Promise.reject(window.location.href = response.authenticationURL);
+    }
+    if (response.isScript) {
+      await response.activeScript();
+    }
+    const responseStatusIsTurboStreamable = response.ok || response.unprocessableEntity;
+    if (responseStatusIsTurboStreamable && response.isTurboStream) {
+      await response.renderTurboStream();
+    }
+    return response;
   }
-  addHeader(t2, e2) {
-    const n2 = this.additionalHeaders;
-    n2[t2] = e2;
-    this.options.headers = n2;
+  addHeader(key, value) {
+    const headers = this.additionalHeaders;
+    headers[key] = value;
+    this.options.headers = headers;
   }
   sameHostname() {
-    if (!this.originalUrl.startsWith("http:"))
+    if (!this.originalUrl.startsWith("http:") && !this.originalUrl.startsWith("https:")) {
       return true;
+    }
     try {
       return new URL(this.originalUrl).hostname === window.location.hostname;
-    } catch (t2) {
+    } catch (_) {
       return true;
     }
   }
   get fetchOptions() {
-    return { method: this.method.toUpperCase(), headers: this.headers, body: this.formattedBody, signal: this.signal, credentials: this.credentials, redirect: this.redirect };
+    return {
+      method: this.method.toUpperCase(),
+      headers: this.headers,
+      body: this.formattedBody,
+      signal: this.signal,
+      credentials: this.credentials,
+      redirect: this.redirect,
+      keepalive: this.keepalive
+    };
   }
   get headers() {
-    const t2 = { "X-Requested-With": "XMLHttpRequest", "Content-Type": this.contentType, Accept: this.accept };
-    this.sameHostname() && (t2["X-CSRF-Token"] = this.csrfToken);
-    return compact(Object.assign(t2, this.additionalHeaders));
+    const baseHeaders = {
+      "X-Requested-With": "XMLHttpRequest",
+      "Content-Type": this.contentType,
+      Accept: this.accept
+    };
+    if (this.sameHostname()) {
+      baseHeaders["X-CSRF-Token"] = this.csrfToken;
+    }
+    return compact(Object.assign(baseHeaders, this.additionalHeaders));
   }
   get csrfToken() {
     return getCookie(metaContent("csrf-param")) || metaContent("csrf-token");
   }
   get contentType() {
-    return this.options.contentType ? this.options.contentType : this.body == null || this.body instanceof window.FormData ? undefined : this.body instanceof window.File ? this.body.type : "application/json";
+    if (this.options.contentType) {
+      return this.options.contentType;
+    } else if (this.body == null || this.body instanceof window.FormData) {
+      return;
+    } else if (this.body instanceof window.File) {
+      return this.body.type;
+    }
+    return "application/json";
   }
   get accept() {
     switch (this.responseKind) {
@@ -282,13 +233,19 @@ class FetchRequest {
     return this.options.body;
   }
   get query() {
-    const t2 = (this.originalUrl.split("?")[1] || "").split("#")[0];
-    const e2 = new URLSearchParams(t2);
-    let n2 = this.options.query;
-    n2 = n2 instanceof window.FormData ? stringEntriesFromFormData(n2) : n2 instanceof window.URLSearchParams ? n2.entries() : Object.entries(n2 || {});
-    mergeEntries(e2, n2);
-    const s2 = e2.toString();
-    return s2.length > 0 ? `?${s2}` : "";
+    const originalQuery = (this.originalUrl.split("?")[1] || "").split("#")[0];
+    const params = new URLSearchParams(originalQuery);
+    let requestQuery = this.options.query;
+    if (requestQuery instanceof window.FormData) {
+      requestQuery = stringEntriesFromFormData(requestQuery);
+    } else if (requestQuery instanceof window.URLSearchParams) {
+      requestQuery = requestQuery.entries();
+    } else {
+      requestQuery = Object.entries(requestQuery || {});
+    }
+    mergeEntries(params, requestQuery);
+    const query = params.toString();
+    return query.length > 0 ? `?${query}` : "";
   }
   get url() {
     return this.originalUrl.split("?")[0].split("#")[0] + this.query;
@@ -305,18 +262,26 @@ class FetchRequest {
   get credentials() {
     return this.options.credentials || "same-origin";
   }
+  get keepalive() {
+    return this.options.keepalive || false;
+  }
   get additionalHeaders() {
     return this.options.headers || {};
   }
   get formattedBody() {
-    const t2 = Object.prototype.toString.call(this.body) === "[object String]";
-    const e2 = this.headers["Content-Type"] === "application/json";
-    return e2 && !t2 ? JSON.stringify(this.body) : this.body;
+    const bodyIsAString = Object.prototype.toString.call(this.body) === "[object String]";
+    const contentTypeIsJson = this.headers["Content-Type"] === "application/json";
+    if (contentTypeIsJson && !bodyIsAString) {
+      return JSON.stringify(this.body);
+    }
+    return this.body;
   }
 }
-async function post(t2, e2) {
-  const n2 = new FetchRequest("post", t2, e2);
-  return n2.perform();
+
+// node_modules/@rails/request.js/src/verbs.js
+async function post(url, options) {
+  const request = new FetchRequest("post", url, options);
+  return request.perform();
 }
 
 // app/assets/javascripts/components/web_authn.js
@@ -332,7 +297,7 @@ class WebAuthn extends HTMLElement {
     this.run();
   }
   run() {
-    exports__github_webauthn_json[this.action](this.options).then(async (credential) => {
+    navigator.credentials[this.action](this.publicKey).then(async (credential) => {
       this.showProgress();
       const { response, redirected } = await post(this.callback, {
         responseKind: "turbo-stream",
@@ -382,6 +347,13 @@ class WebAuthn extends HTMLElement {
   }
   get message() {
     return this.getAttribute("message");
+  }
+  get publicKey() {
+    if (this.action === "create") {
+      return PublicKeyCredential.parseCreationOptionsFromJSON(this.options);
+    } else {
+      return PublicKeyCredential.parseRequestOptionsFromJSON(this.options);
+    }
   }
 }
 
