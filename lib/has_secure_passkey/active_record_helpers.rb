@@ -41,6 +41,10 @@ module HasSecurePasskey::ActiveRecordHelpers
         save
     end
 
+    define_method :reset_webauthn_id do
+      self.webauthn_id = self.class.webauthn_id
+    end
+
     define_method :encode_webauthn_message do
       HasSecurePasskey::OptionsForCreate.new(authenticatable: self).message
     end
