@@ -28,7 +28,7 @@ class HasSecurePasskey::OptionsForCreate
   end
 
   def as_json
-    options
+    credential.as_json
   end
 
   def challenge

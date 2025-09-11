@@ -22,6 +22,10 @@ module HasSecurePasskey::ActiveRecordHelpers
         authenticated
     end
 
+    define_singleton_method :recover_passkey do |params:|
+      HasSecurePasskey::Recovery.new(model: self, params:).run
+    end
+
     define_singleton_method :create_by_webauthn do |params:|
       authenticatable = new(HasSecurePasskey::OptionsForCreate.
         from_message(params[:webauthn_message]).authenticatable)
@@ -43,6 +47,10 @@ module HasSecurePasskey::ActiveRecordHelpers
 
     define_method :reset_webauthn_id do
       self.webauthn_id = self.class.webauthn_id
+    end
+
+    define_method :passkey_recovery_token do
+      to_sgid(expires_in: 1.hour, for: :recovery).to_s
     end
 
     define_method :encode_webauthn_message do

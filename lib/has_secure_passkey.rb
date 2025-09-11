@@ -9,4 +9,9 @@ require "has_secure_passkey/authenticate_by"
 require "has_secure_passkey/add_passkey"
 
 module HasSecurePasskey
+  def self.find_recovery_token(token)
+    GlobalID::Locator.
+      locate_signed(token, for: :recovery).
+      tap { it&.reset_webauthn_id } || raise(ActiveRecord::RecordNotFound)
+  end
 end

@@ -297,11 +297,11 @@ class WebAuthn extends HTMLElement {
     this.run();
   }
   run() {
-    navigator.credentials[this.action](this.publicKey).then(async (credential) => {
+    navigator.credentials[this.action]({ publicKey: this.publicKey }).then(async (credential) => {
       this.showProgress();
       const { response, redirected } = await post(this.callback, {
         responseKind: "turbo-stream",
-        body: JSON.stringify(Object.assign(credential, { webauthn_message: this.message }))
+        body: JSON.stringify(Object.assign(credential.toJSON(), { webauthn_message: this.message }))
       });
       this.hideProgress();
       if (response.ok && redirected) {
@@ -314,6 +314,7 @@ class WebAuthn extends HTMLElement {
         Turbo.navigator.proposeVisit(new URL(response.url), options);
       }
     }).catch((error) => {
+      console.error(error);
       this.onError(error);
     });
   }

@@ -22,7 +22,7 @@ class HasSecurePasskey::OptionsForGet
   end
 
   def as_json
-    { publicKey: credential.as_json }
+    credential.as_json
   end
 
   private
