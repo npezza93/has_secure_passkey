@@ -28,7 +28,7 @@ module HasSecurePasskey::ActiveRecordHelpers
 
     define_singleton_method :create_by_webauthn do |params:|
       authenticatable = new(HasSecurePasskey::OptionsForCreate.
-        from_message(params[:webauthn_message]).authenticatable)
+        from_message(params[:webauthn_message]).authenticatable.to_h)
 
       ActiveRecord::Base.transaction do
         unless authenticatable.save && authenticatable.add_passkey(params:)
