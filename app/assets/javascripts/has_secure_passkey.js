@@ -351,7 +351,7 @@ class WebAuthn extends HTMLElement {
   }
   get publicKey() {
     if (this.action === "create") {
-      return PublicKeyCredential.parseCreationOptionsFromJSON(this.options);
+      return PublicKeyCredential.parseCreationOptionsFromJSON(this.options.publicKey);
     } else {
       return PublicKeyCredential.parseRequestOptionsFromJSON(this.options);
     }
