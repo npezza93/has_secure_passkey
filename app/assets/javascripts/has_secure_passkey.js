@@ -286,7 +286,7 @@ async function post(url, options) {
 
 // app/assets/javascripts/components/web_authn.js
 class WebAuthn extends HTMLElement {
-  static observedAttributes = ["action", "callback", "options"];
+  static observedAttributes = ["action", "callback", "options", "delay"];
   constructor() {
     super();
   }
@@ -294,7 +294,11 @@ class WebAuthn extends HTMLElement {
     this.progressBar = Turbo.navigator.delegate.adapter.progressBar;
     this.setAttribute("data-turbo-temporary", 1);
     this.setAttribute("data-turbo-track", "reload");
-    this.run();
+    if (this.delay) {
+      setTimeout(() => this.run(), Number(this.delay));
+    } else {
+      this.run();
+    }
   }
   run() {
     navigator.credentials[this.action]({ publicKey: this.publicKey }).then(async (credential) => {
@@ -342,6 +346,9 @@ class WebAuthn extends HTMLElement {
   }
   get callback() {
     return this.getAttribute("callback");
+  }
+  get delay() {
+    return this.getAttribute("delay");
   }
   get options() {
     return JSON.parse(this.getAttribute("options"));

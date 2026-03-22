@@ -1,7 +1,7 @@
 import { post } from "@rails/request.js"
 
 export default class WebAuthn extends HTMLElement {
-  static observedAttributes = ["action", "callback", "options"];
+  static observedAttributes = ["action", "callback", "options", "delay"];
 
   constructor() {
     super();
@@ -11,7 +11,11 @@ export default class WebAuthn extends HTMLElement {
     this.progressBar = Turbo.navigator.delegate.adapter.progressBar
     this.setAttribute("data-turbo-temporary", 1)
     this.setAttribute("data-turbo-track", "reload")
-    this.run()
+    if (this.delay) {
+      setTimeout(() => this.run(), Number(this.delay))
+    } else {
+      this.run()
+    }
   }
 
   run() {
@@ -68,6 +72,10 @@ export default class WebAuthn extends HTMLElement {
 
   get callback() {
     return this.getAttribute('callback');
+  }
+
+  get delay() {
+    return this.getAttribute('delay');
   }
 
   get options() {
